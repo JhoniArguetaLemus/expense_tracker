@@ -6,6 +6,7 @@ import {
 import { Expense } from '../types';
 import { ExpenseCard } from '../components/ExpenseCard';
 import { CategorySummary } from '../components/CategorySummary';
+import { BudgetCard } from '../components/BudgetCard';
 
 interface Props {
   onAddPress: () => void;
@@ -48,7 +49,12 @@ export function HomeScreen({ onAddPress, expenses, loading, deleteExpense, total
         data={expenses}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
-        ListHeaderComponent={<CategorySummary expenses={expenses} />}
+        ListHeaderComponent={
+          <>
+            <BudgetCard total={total} />
+            <CategorySummary expenses={expenses} />
+          </>
+        }
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={styles.emptyEmoji}>💸</Text>
