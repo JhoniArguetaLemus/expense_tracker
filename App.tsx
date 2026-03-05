@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { HomeScreen } from './src/screens/HomeScreen';
+import { AddExpenseScreen } from './src/screens/AddExpenseScreen';
+import { useExpenses } from './src/hooks/useExpenses';
+
+type Screen = 'home' | 'add';
 
 export default function App() {
+  const [screen, setScreen] = useState<Screen>('home');
+  const expensesData = useExpenses();
+
+  if (screen === 'add') {
+    return (
+      <AddExpenseScreen
+        onBack={() => setScreen('home')}
+        addExpense={expensesData.addExpense}
+      />
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <HomeScreen
+      onAddPress={() => setScreen('add')}
+      expenses={expensesData.expenses}
+      loading={expensesData.loading}
+      deleteExpense={expensesData.deleteExpense}
+      total={expensesData.total}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
