@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Expense, CATEGORIES } from '../types';
 import { useTheme } from '../context/ThemeContext';
+import { useCurrencyContext } from '../context/CurrencyContext';
 
 interface Props {
   expense: Expense;
@@ -10,6 +11,7 @@ interface Props {
 
 export function ExpenseCard({ expense, onDelete }: Props) {
   const { colors } = useTheme();
+  const { format } = useCurrencyContext();
   const cat = CATEGORIES[expense.category];
   const date = new Date(expense.date).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric',
@@ -25,7 +27,7 @@ export function ExpenseCard({ expense, onDelete }: Props) {
         </View>
       </View>
       <View style={styles.right}>
-        <Text style={[styles.amount, { color: colors.primary }]}>${expense.amount.toFixed(2)}</Text>
+        <Text style={[styles.amount, { color: colors.primary }]}>{format(expense.amount)}</Text>
         <TouchableOpacity onPress={() => onDelete(expense.id)} style={[styles.deleteBtn, { backgroundColor: colors.primaryLight }]}>
           <Text style={[styles.deleteText, { color: colors.textMuted }]}>✕</Text>
         </TouchableOpacity>

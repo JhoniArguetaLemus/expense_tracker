@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './src/context/ThemeContext';
+import { CurrencyProvider } from './src/context/CurrencyContext';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { AddExpenseScreen } from './src/screens/AddExpenseScreen';
 import { useExpenses } from './src/hooks/useExpenses';
@@ -33,7 +34,9 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <CurrencyProvider>
+        <AppContent />
+      </CurrencyProvider>
     </ThemeProvider>
   );
 }
