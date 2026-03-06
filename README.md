@@ -19,9 +19,12 @@ A clean and minimal personal expense tracking app built with React Native & Expo
 ## 📱 Screenshots
 
 <div align="center">
-  <img width="280" alt="Home" src="https://github.com/user-attachments/assets/82927c6a-23e1-4537-8462-1357ed71eebd" />
-  &nbsp;&nbsp;&nbsp;
-  <img width="280" alt="Add Expense" src="https://github.com/user-attachments/assets/74316e25-59af-4d5c-8981-7e0a3957421d" />
+
+
+<img width="300" height="1266" alt="IMG_1449" src="https://github.com/user-attachments/assets/fd609f55-bdc1-4b8e-931a-5b75255622d0" />
+<img width="300" height="1266" alt="IMG_1450" src="https://github.com/user-attachments/assets/9af1301d-17b6-4ed8-84e0-0de158a15110" />
+<img width="300" height="1266" alt="IMG_1451" src="https://github.com/user-attachments/assets/ac385343-15f1-48c3-80a3-40a3395aaf29" />
+ 
 </div>
 
 ---
