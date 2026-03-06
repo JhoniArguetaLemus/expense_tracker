@@ -7,6 +7,7 @@ import { Expense } from '../types';
 import { ExpenseCard } from '../components/ExpenseCard';
 import { CategorySummary } from '../components/CategorySummary';
 import { BudgetCard } from '../components/BudgetCard';
+import { ExpenseChart } from '../components/ExpenseChart';
 import { useTheme } from '../context/ThemeContext';
 import { exportToCSV } from '../utils/exportCSV';
 
@@ -91,6 +92,7 @@ export function HomeScreen({ onAddPress, expenses, loading, deleteExpense, total
         ListHeaderComponent={
           <>
             <BudgetCard total={total} />
+            <ExpenseChart expenses={expenses} />
             <CategorySummary expenses={expenses} />
           </>
         }
