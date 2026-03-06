@@ -7,6 +7,7 @@ import { Expense } from '../types';
 import { ExpenseCard } from '../components/ExpenseCard';
 import { CategorySummary } from '../components/CategorySummary';
 import { BudgetCard } from '../components/BudgetCard';
+import { useTheme } from '../context/ThemeContext';
 
 interface Props {
   onAddPress: () => void;
@@ -17,30 +18,34 @@ interface Props {
 }
 
 export function HomeScreen({ onAddPress, expenses, loading, deleteExpense, total }: Props) {
+  const { colors, toggleTheme, isDark } = useTheme();
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator color="#A855F7" size="large" />
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+        <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      {/* Header */}
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>My Expenses</Text>
-          <Text style={styles.subtitle}>{expenses.length} transactions</Text>
+          <Text style={[styles.greeting, { color: colors.text }]}>My Expenses</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{expenses.length} transactions</Text>
         </View>
-        <TouchableOpacity style={styles.addBtn} onPress={onAddPress}>
-          <Text style={styles.addBtnText}>+ Add</Text>
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity style={[styles.themeBtn, { backgroundColor: colors.surface, borderColor: colors.border }]} onPress={toggleTheme}>
+            <Text style={styles.themeEmoji}>{isDark ? '☀️' : '🌙'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.addBtn, { backgroundColor: colors.primary }]} onPress={onAddPress}>
+            <Text style={styles.addBtnText}>+ Add</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* Total Card */}
-      <View style={styles.totalCard}>
+      <View style={[styles.totalCard, { backgroundColor: colors.primary }]}>
         <Text style={styles.totalLabel}>Total Spent</Text>
         <Text style={styles.totalAmount}>${total.toFixed(2)}</Text>
       </View>
@@ -58,8 +63,8 @@ export function HomeScreen({ onAddPress, expenses, loading, deleteExpense, total
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={styles.emptyEmoji}>💸</Text>
-            <Text style={styles.emptyText}>No expenses yet</Text>
-            <Text style={styles.emptySubtext}>Tap "+ Add" to get started</Text>
+            <Text style={[styles.emptyText, { color: colors.text }]}>No expenses yet</Text>
+            <Text style={[styles.emptySubtext, { color: colors.textSecondary }]}>Tap "+ Add" to get started</Text>
           </View>
         }
         renderItem={({ item }) => (
@@ -71,25 +76,22 @@ export function HomeScreen({ onAddPress, expenses, loading, deleteExpense, total
 }
 
 const styles = StyleSheet.create({
-  safe:        { flex: 1, backgroundColor: '#F0F9FF' },
-  centered:    { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F9FF' },
-  header:      { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 },
-  greeting:    { color: '#0C1A2E', fontSize: 24, fontWeight: '800' },
-  subtitle:    { color: '#64748B', fontSize: 13, marginTop: 2 },
-  addBtn:      { backgroundColor: '#38BDF8', borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10 },
-  addBtnText:  { color: '#fff', fontWeight: '700', fontSize: 15 },
-  totalCard:   {
-    backgroundColor: '#38BDF8',
-    borderRadius: 20,
-    marginHorizontal: 20,
-    marginBottom: 20,
-    padding: 24,
-  },
-  totalLabel:  { color: 'rgba(255,255,255,0.85)', fontSize: 14 },
-  totalAmount: { color: '#fff', fontSize: 40, fontWeight: '800', marginTop: 4 },
-  list:        { paddingHorizontal: 20, paddingBottom: 40 },
-  empty:       { alignItems: 'center', marginTop: 40 },
-  emptyEmoji:  { fontSize: 48, marginBottom: 10 },
-  emptyText:   { color: '#0C1A2E', fontSize: 18, fontWeight: '600' },
-  emptySubtext:{ color: '#64748B', fontSize: 14, marginTop: 4 },
+  safe:          { flex: 1 },
+  centered:      { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  header:        { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 },
+  greeting:      { fontSize: 24, fontWeight: '800' },
+  subtitle:      { fontSize: 13, marginTop: 2 },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  themeBtn:      { borderRadius: 10, padding: 8, borderWidth: 1.5 },
+  themeEmoji:    { fontSize: 16 },
+  addBtn:        { borderRadius: 12, paddingHorizontal: 18, paddingVertical: 10 },
+  addBtnText:    { color: '#fff', fontWeight: '700', fontSize: 15 },
+  totalCard:     { borderRadius: 20, marginHorizontal: 20, marginBottom: 20, padding: 24 },
+  totalLabel:    { color: 'rgba(255,255,255,0.85)', fontSize: 14 },
+  totalAmount:   { color: '#fff', fontSize: 40, fontWeight: '800', marginTop: 4 },
+  list:          { paddingHorizontal: 20, paddingBottom: 40 },
+  empty:         { alignItems: 'center', marginTop: 40 },
+  emptyEmoji:    { fontSize: 48, marginBottom: 10 },
+  emptyText:     { fontSize: 18, fontWeight: '600' },
+  emptySubtext:  { fontSize: 14, marginTop: 4 },
 });

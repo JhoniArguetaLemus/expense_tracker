@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { ThemeProvider } from './src/context/ThemeContext';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { AddExpenseScreen } from './src/screens/AddExpenseScreen';
 import { useExpenses } from './src/hooks/useExpenses';
 
 type Screen = 'home' | 'add';
 
-export default function App() {
+function AppContent() {
   const [screen, setScreen] = useState<Screen>('home');
   const expensesData = useExpenses();
 
@@ -26,5 +27,13 @@ export default function App() {
       deleteExpense={expensesData.deleteExpense}
       total={expensesData.total}
     />
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { Category, CATEGORIES } from '../types';
 import { useExpenses } from '../hooks/useExpenses';
+import { useTheme } from '../context/ThemeContext';
 
 interface Props {
   onBack: () => void;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function AddExpenseScreen({ onBack, addExpense }: Props) {
+  const { colors } = useTheme();
   const [title, setTitle]       = useState('');
   const [amount, setAmount]     = useState('');
   const [category, setCategory] = useState<Category>('other');
@@ -20,64 +22,61 @@ export function AddExpenseScreen({ onBack, addExpense }: Props) {
     if (!title.trim()) return Alert.alert('Missing field', 'Please enter a title.');
     const parsed = parseFloat(amount);
     if (isNaN(parsed) || parsed <= 0) return Alert.alert('Invalid amount', 'Enter a valid amount.');
-
     addExpense({ title: title.trim(), amount: parsed, category });
     onBack();
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.container}>
-        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={onBack} style={styles.backBtn}>
-            <Text style={styles.backText}>← Back</Text>
+            <Text style={[styles.backText, { color: colors.primary }]}>← Back</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>New Expense</Text>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>New Expense</Text>
           <View style={{ width: 60 }} />
         </View>
 
-        {/* Title */}
-        <Text style={styles.label}>Title</Text>
+        <Text style={[styles.label, { color: colors.textSecondary }]}>Title</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.surface, color: colors.text, borderColor: colors.border }]}
           placeholder="e.g. Lunch, Uber..."
-          placeholderTextColor="#6B7280"
+          placeholderTextColor={colors.textMuted}
           value={title}
           onChangeText={setTitle}
         />
 
-        {/* Amount */}
-        <Text style={styles.label}>Amount ($)</Text>
+        <Text style={[styles.label, { color: colors.textSecondary }]}>Amount ($)</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.surface, color: colors.text, borderColor: colors.border }]}
           placeholder="0.00"
-          placeholderTextColor="#6B7280"
+          placeholderTextColor={colors.textMuted}
           keyboardType="decimal-pad"
           value={amount}
           onChangeText={setAmount}
         />
 
-        {/* Category */}
-        <Text style={styles.label}>Category</Text>
+        <Text style={[styles.label, { color: colors.textSecondary }]}>Category</Text>
         <View style={styles.categories}>
           {(Object.entries(CATEGORIES) as [Category, typeof CATEGORIES[Category]][]).map(([key, cat]) => (
             <TouchableOpacity
               key={key}
               style={[
                 styles.catBtn,
+                { backgroundColor: colors.surface, borderColor: colors.border },
                 category === key && { backgroundColor: cat.color, borderColor: cat.color },
               ]}
               onPress={() => setCategory(key)}
             >
               <Text style={styles.catEmoji}>{cat.emoji}</Text>
-              <Text style={[styles.catLabel, category === key && { color: '#fff' }]}>{cat.label}</Text>
+              <Text style={[styles.catLabel, { color: colors.textSecondary }, category === key && { color: '#fff' }]}>
+                {cat.label}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        {/* Save */}
-        <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+        <TouchableOpacity style={[styles.saveBtn, { backgroundColor: colors.primary }]} onPress={handleSave}>
           <Text style={styles.saveBtnText}>Save Expense</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -86,37 +85,18 @@ export function AddExpenseScreen({ onBack, addExpense }: Props) {
 }
 
 const styles = StyleSheet.create({
-  safe:        { flex: 1, backgroundColor: '#F0F9FF' },
+  safe:        { flex: 1 },
   container:   { padding: 20 },
   header:      { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 },
   backBtn:     { width: 60 },
-  backText:    { color: '#38BDF8', fontSize: 15, fontWeight: '600' },
-  headerTitle: { color: '#0C1A2E', fontSize: 20, fontWeight: '800' },
-  label:       { color: '#64748B', fontSize: 13, fontWeight: '600', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 },
-  input:       {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 14,
-    color: '#0C1A2E',
-    fontSize: 16,
-    marginBottom: 20,
-    borderWidth: 1.5,
-    borderColor: '#BAE6FD',
-  },
+  backText:    { fontSize: 15, fontWeight: '600' },
+  headerTitle: { fontSize: 20, fontWeight: '800' },
+  label:       { fontSize: 13, fontWeight: '600', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 },
+  input:       { borderRadius: 12, padding: 14, fontSize: 16, marginBottom: 20, borderWidth: 1.5 },
   categories:  { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 32 },
-  catBtn:      {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    borderWidth: 1.5,
-    borderColor: '#BAE6FD',
-  },
+  catBtn:      { borderRadius: 12, paddingVertical: 10, paddingHorizontal: 14, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1.5 },
   catEmoji:    { fontSize: 18 },
-  catLabel:    { color: '#64748B', fontSize: 13, fontWeight: '600' },
-  saveBtn:     { backgroundColor: '#38BDF8', borderRadius: 14, padding: 16, alignItems: 'center' },
+  catLabel:    { fontSize: 13, fontWeight: '600' },
+  saveBtn:     { borderRadius: 14, padding: 16, alignItems: 'center' },
   saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '800' },
 });
